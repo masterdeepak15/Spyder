@@ -4,20 +4,16 @@
 
 ---
 
-## ⚡ Quick Install
+## ⚡ Install Skills
 
-### Add this entire marketplace (one command)
+### 🔵 jarvis-ui-react
 ```
-/plugin install https://github.com/masterdeepak15/Spyder
+/plugin install https://github.com/masterdeepak15/Spyder/raw/main/dist/jarvis-ui-react.plugin
 ```
 
-### Install individual skills
-```bash
-# React (50+ components)
-/plugin install https://raw.githubusercontent.com/masterdeepak15/Spyder/main/skills/jarvis-ui-react/SKILL.md
-
-# Blazor (.NET)
-/plugin install https://raw.githubusercontent.com/masterdeepak15/Spyder/main/skills/jarvis-ui-blazor/SKILL.md
+### 🟣 jarvis-ui-blazor
+```
+/plugin install https://github.com/masterdeepak15/Spyder/raw/main/dist/jarvis-ui-blazor.plugin
 ```
 
 ---
@@ -25,27 +21,16 @@
 ## 📦 Skills
 
 ### 🔵 `jarvis-ui-react` — v1.1.0
-> HUD-style sci-fi React component library with 50+ components
+> HUD-style sci-fi React component library — 50+ components
 
 - **npm:** `@masterdeepak15/jarvis-ui`
-- **Demo:** https://jarvis-ui-docs.vercel.app/
-- **Components:** JButton, JModal, JTable, JNodeGraph, JRadialMenu, JCommandPalette, JGaugeChart, JBootScreen, and 40+ more
-- **Install:**
-  ```
-  /plugin install https://raw.githubusercontent.com/masterdeepak15/Spyder/main/skills/jarvis-ui-react/SKILL.md
-  ```
-
----
+- **Components:** JButton, JModal, JTable, JNodeGraph, JRadialMenu, JCommandPalette, JGaugeChart, JBootScreen + 40 more
 
 ### 🟣 `jarvis-ui-blazor` — v1.0.0
-> Cinematic HUD-style Blazor (.NET/C#/Razor) component library
+> Cinematic HUD-style Blazor (.NET/C#/Razor) component library — 57+ components
 
 - **NuGet:** `JarvisUI`
-- **Components:** JButton, JModal, JTable, JLeafletMap, JNodeGraph, JRadialMenu, JCommandPalette, and 50+ more
-- **Install:**
-  ```
-  /plugin install https://raw.githubusercontent.com/masterdeepak15/Spyder/main/skills/jarvis-ui-blazor/SKILL.md
-  ```
+- **Components:** JButton, JModal, JTable, JLeafletMap, JGoogleMap, JNodeGraph, JRadialMenu + 50 more
 
 ---
 
@@ -53,48 +38,30 @@
 
 ```
 Spyder/
-├── marketplace.json          ← machine-readable skill index
-├── README.md
+├── marketplace.json          ← skill index
+├── dist/
+│   ├── jarvis-ui-react.plugin   ← install this
+│   └── jarvis-ui-blazor.plugin  ← install this
 └── skills/
     ├── jarvis-ui-react/
-    │   ├── SKILL.md          ← main skill file
-    │   ├── .claude-plugin/
-    │   │   └── plugin.json
-    │   └── references/       ← per-component docs (50 files)
+    │   ├── SKILL.md
+    │   ├── .claude-plugin/plugin.json
+    │   └── references/  (50 component docs)
     └── jarvis-ui-blazor/
         ├── SKILL.md
-        ├── .claude-plugin/
-        │   └── plugin.json
-        └── reference/        ← per-component docs (57 files)
+        ├── .claude-plugin/plugin.json
+        └── reference/   (57 component docs)
 ```
 
 ---
 
-## 🤝 Add Your Skill to This Marketplace
+## 🤝 Add Your Skill
 
 1. Fork this repo
 2. Add your skill under `skills/your-skill-name/`
-   ```
-   skills/your-skill-name/
-   ├── SKILL.md
-   └── .claude-plugin/
-       └── plugin.json
-   ```
-3. Add your entry to `marketplace.json`
-4. Open a PR!
-
-**`plugin.json` format:**
-```json
-{
-  "name": "your-skill-name",
-  "description": "What your skill does",
-  "version": "1.0.0",
-  "author": {
-    "name": "Your Name",
-    "email": "you@example.com"
-  }
-}
-```
+3. Package it: `zip -r dist/your-skill-name.plugin skills/your-skill-name/`
+4. Add entry to `marketplace.json`
+5. Open a PR!
 
 ---
 
