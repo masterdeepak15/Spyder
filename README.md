@@ -1,19 +1,19 @@
-# 🕷️ Spyder — Claude AI Skill Marketplace
+# 🕷️ Spyder — Claude Code Skill Marketplace
 
-> HUD-style UI skills for Claude Code & Cowork by [@masterdeepak15](https://github.com/masterdeepak15)
+> HUD-style Jarvis UI skills for Claude Code by [@masterdeepak15](https://github.com/masterdeepak15)
 
 ---
 
-## ⚡ Install Skills
+## ⚡ Add as Marketplace (one command)
 
-### 🔵 jarvis-ui-react
 ```
-/plugin install https://github.com/masterdeepak15/Spyder/raw/main/dist/jarvis-ui-react.plugin
+/plugin marketplace add masterdeepak15/Spyder
 ```
 
-### 🟣 jarvis-ui-blazor
+Then install any skill:
 ```
-/plugin install https://github.com/masterdeepak15/Spyder/raw/main/dist/jarvis-ui-blazor.plugin
+/plugin install jarvis-ui-react@spyder
+/plugin install jarvis-ui-blazor@spyder
 ```
 
 ---
@@ -24,6 +24,7 @@
 > HUD-style sci-fi React component library — 50+ components
 
 - **npm:** `@masterdeepak15/jarvis-ui`
+- **Demo:** https://jarvis-ui-docs.vercel.app/
 - **Components:** JButton, JModal, JTable, JNodeGraph, JRadialMenu, JCommandPalette, JGaugeChart, JBootScreen + 40 more
 
 ### 🟣 `jarvis-ui-blazor` — v1.0.0
@@ -38,30 +39,30 @@
 
 ```
 Spyder/
-├── marketplace.json          ← skill index
-├── dist/
-│   ├── jarvis-ui-react.plugin   ← install this
-│   └── jarvis-ui-blazor.plugin  ← install this
-└── skills/
-    ├── jarvis-ui-react/
-    │   ├── SKILL.md
-    │   ├── .claude-plugin/plugin.json
-    │   └── references/  (50 component docs)
-    └── jarvis-ui-blazor/
-        ├── SKILL.md
-        ├── .claude-plugin/plugin.json
-        └── reference/   (57 component docs)
+├── .claude-plugin/
+│   └── marketplace.json     ← Claude Code reads this
+├── skills/
+│   ├── jarvis-ui-react/
+│   │   ├── SKILL.md
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── references/  (50 component docs)
+│   └── jarvis-ui-blazor/
+│       ├── SKILL.md
+│       ├── .claude-plugin/plugin.json
+│       └── reference/   (57 component docs)
+└── dist/
+    ├── jarvis-ui-react.plugin
+    └── jarvis-ui-blazor.plugin
 ```
 
 ---
 
-## 🤝 Add Your Skill
+## 🤝 Submit Your Plugin to Spyder
 
-1. Fork this repo
-2. Add your skill under `skills/your-skill-name/`
-3. Package it: `zip -r dist/your-skill-name.plugin skills/your-skill-name/`
-4. Add entry to `marketplace.json`
-5. Open a PR!
+1. Fork this repo  
+2. Add your plugin under `skills/your-plugin-name/`  
+3. Add entry to `.claude-plugin/marketplace.json`  
+4. Open a PR!
 
 ---
 

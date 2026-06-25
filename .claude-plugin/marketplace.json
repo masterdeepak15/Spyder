@@ -1,0 +1,40 @@
+{
+  "name": "spyder",
+  "owner": {
+    "name": "Deepak Chougale",
+    "email": "mailboxdeepak15@gmail.com"
+  },
+  "metadata": {
+    "description": "Spyder — HUD-style Jarvis UI skills for React and Blazor (.NET)",
+    "version": "1.0.0",
+    "homepage": "https://github.com/masterdeepak15/Spyder",
+    "pluginRoot": "./skills"
+  },
+  "plugins": [
+    {
+      "name": "jarvis-ui-react",
+      "source": "./skills/jarvis-ui-react",
+      "description": "JARVIS UI React — HUD-style sci-fi React component library with 50+ components (JButton, JModal, JTable, JNodeGraph, JRadialMenu, JCommandPalette, JGaugeChart, JBootScreen...)",
+      "version": "1.1.0",
+      "author": {
+        "name": "Deepak Chougale",
+        "email": "mailboxdeepak15@gmail.com"
+      },
+      "category": "ui",
+      "keywords": ["react", "ui", "jarvis", "hud", "sci-fi", "components", "tailwind"],
+      "homepage": "https://jarvis-ui-docs.vercel.app/"
+    },
+    {
+      "name": "jarvis-ui-blazor",
+      "source": "./skills/jarvis-ui-blazor",
+      "description": "JARVIS UI Blazor — cinematic HUD-style Blazor (.NET/C#/Razor) component library with 57+ components (JButton, JModal, JTable, JLeafletMap, JGoogleMap, JNodeGraph, JRadialMenu...)",
+      "version": "1.0.0",
+      "author": {
+        "name": "Deepak Chougale",
+        "email": "mailboxdeepak15@gmail.com"
+      },
+      "category": "ui",
+      "keywords": ["blazor", "dotnet", "ui", "jarvis", "hud", "sci-fi", "components", "csharp"]
+    }
+  ]
+}
