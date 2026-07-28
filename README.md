@@ -125,4 +125,10 @@ Want to add your own skill to this marketplace?
 
 ---
 
+## License
+
+MIT — see `LICENSE`.
+
+---
+
 Made with ❤️ by [Deepak Chougale](https://github.com/masterdeepak15)
