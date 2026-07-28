@@ -28,6 +28,9 @@ Pick whichever skills you need:
 ```
 /plugin install jarvis-ui-blazor@spyder
 ```
+```
+/plugin install teamhub-team@spyder
+```
 
 ---
 
@@ -53,6 +56,9 @@ If you just want one skill without adding the full marketplace:
 ```
 /plugin install https://github.com/masterdeepak15/Spyder/raw/main/dist/jarvis-ui-blazor.plugin
 ```
+```
+/plugin install https://github.com/masterdeepak15/Spyder/raw/main/dist/teamhub-team.plugin
+```
 
 ---
 
@@ -71,6 +77,14 @@ If you just want one skill without adding the full marketplace:
 - **NuGet:** `JarvisUI`
 - **Components:** JButton, JModal, JTable, JLeafletMap, JGoogleMap, JNodeGraph, JRadialMenu + 50 more
 
+### 🟢 `teamhub-team` — v1.0.0
+> Multi-agent Team Lead / Developer / Project Planner skills, backed by a
+> self-hosted TeamHub MCP server (no Jira required)
+
+- **Bundles:** `team-lead`, `team-developer`, `project-planner`
+- **Requires:** the `teamhub` MCP server running and wired into `.mcp.json`
+  — see `skills/teamhub-team/README.md` after installing
+
 ---
 
 ## 🗂️ Repo Structure
@@ -84,13 +98,18 @@ Spyder/
 │   │   ├── SKILL.md
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── references/      (50 per-component docs)
-│   └── jarvis-ui-blazor/
-│       ├── SKILL.md
+│   ├── jarvis-ui-blazor/
+│   │   ├── SKILL.md
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── reference/       (57 per-component docs)
+│   └── teamhub-team/
+│       ├── README.md
 │       ├── .claude-plugin/plugin.json
-│       └── reference/       (57 per-component docs)
+│       └── skills/           (team-lead, team-developer, project-planner)
 └── dist/
     ├── jarvis-ui-react.plugin
-    └── jarvis-ui-blazor.plugin
+    ├── jarvis-ui-blazor.plugin
+    └── teamhub-team.plugin
 ```
 
 ---

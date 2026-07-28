@@ -35,6 +35,18 @@
       },
       "category": "ui",
       "keywords": ["blazor", "dotnet", "ui", "jarvis", "hud", "sci-fi", "components", "csharp"]
+    },
+    {
+      "name": "teamhub-team",
+      "source": "./skills/teamhub-team",
+      "description": "TeamHub Team Protocol — Team Lead / Developer / Project Planner skills for a multi-agent Claude Code team, backed by a self-hosted, project-aware TeamHub MCP server (SQLite-backed, no Jira required). Requires running the teamhub MCP server separately — see the plugin README.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Deepak Chougale",
+        "email": "mailboxdeepak15@gmail.com"
+      },
+      "category": "workflow",
+      "keywords": ["multi-agent", "team", "mcp", "planner", "task-management", "workflow", "sprint", "developer", "team-lead"]
     }
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "name": "teamhub-team",
+  "description": "TeamHub Team Protocol — Team Lead / Developer / Project Planner skills for running a multi-agent Claude Code team (one human-driven Lead session plans and assigns work, Developer sessions do the coding), backed by a self-hosted, project-aware TeamHub MCP server. Requires the teamhub MCP server running and wired into .mcp.json — see this plugin's README.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Deepak Chougale",
+    "email": "mailboxdeepak15@gmail.com"
+  }
+}
