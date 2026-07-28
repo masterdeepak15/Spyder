@@ -77,11 +77,11 @@ If you just want one skill without adding the full marketplace:
 - **NuGet:** `JarvisUI`
 - **Components:** JButton, JModal, JTable, JLeafletMap, JGoogleMap, JNodeGraph, JRadialMenu + 50 more
 
-### 🟢 `teamhub-team` — v1.0.0
-> Multi-agent Team Lead / Developer / Project Planner skills, backed by a
-> self-hosted TeamHub MCP server (no Jira required)
+### 🟢 `teamhub-team` — v1.2.0
+> Multi-agent Team Lead / Developer / Tester / Project Planner skills,
+> backed by a self-hosted TeamHub MCP server (no Jira required)
 
-- **Bundles:** `team-lead`, `team-developer`, `project-planner`
+- **Bundles:** `team-lead`, `team-developer`, `tester`, `project-planner`
 - **Requires:** the `teamhub` MCP server running and wired into `.mcp.json`
   — see `skills/teamhub-team/README.md` after installing
 
@@ -105,7 +105,7 @@ Spyder/
 │   └── teamhub-team/
 │       ├── README.md
 │       ├── .claude-plugin/plugin.json
-│       └── skills/           (team-lead, team-developer, project-planner)
+│       └── skills/           (team-lead, team-developer, tester, project-planner)
 └── dist/
     ├── jarvis-ui-react.plugin
     ├── jarvis-ui-blazor.plugin

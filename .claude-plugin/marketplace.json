@@ -39,14 +39,14 @@
     {
       "name": "teamhub-team",
       "source": "./skills/teamhub-team",
-      "description": "TeamHub Team Protocol — Team Lead / Developer / Project Planner skills for a multi-agent Claude Code team, backed by a self-hosted, project-aware TeamHub MCP server (SQLite-backed, no Jira required). Requires running the teamhub MCP server separately — see the plugin README. Supports an optional auto/manual developer mode with real mid-task interrupt from the Lead.",
-      "version": "1.1.0",
+      "description": "TeamHub Team Protocol — Team Lead / Developer / Tester / Project Planner skills for a multi-agent Claude Code team, backed by a self-hosted, project-aware TeamHub MCP server (SQLite-backed, no Jira required). Requires running the teamhub MCP server separately — see the plugin README. Supports an optional auto/manual mode with real mid-task interrupt from the Lead.",
+      "version": "1.2.0",
       "author": {
         "name": "Deepak Chougale",
         "email": "mailboxdeepak15@gmail.com"
       },
       "category": "workflow",
-      "keywords": ["multi-agent", "team", "mcp", "planner", "task-management", "workflow", "sprint", "developer", "team-lead"]
+      "keywords": ["multi-agent", "team", "mcp", "planner", "task-management", "workflow", "sprint", "developer", "tester", "team-lead"]
     }
   ]
 }
