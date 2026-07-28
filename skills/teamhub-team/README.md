@@ -53,3 +53,20 @@ Installs all three skills at once, namespaced as `teamhub-team:team-lead`,
 
 Any human, on either side, can call the underlying TeamHub tools directly
 at any time — the skills are a default playbook, not a restriction.
+
+## Developer mode: manual (default) vs auto
+
+Every registration has a `mode`, set at registration or anytime via
+`set_mode`:
+
+- **`manual`** (default) — human-supervised, nothing can stop a session
+  mid-turn.
+- **`auto`** — meaningful only for a headless Developer
+  (`agents/runner.ts --mode auto` in the
+  [claude-team-protocol](https://github.com/masterdeepak15/claude-team-protocol)
+  repo): file edits are auto-approved, and the Lead can genuinely interrupt
+  and redirect its in-flight work mid-task via `interrupt_developer` — a
+  watchdog polls for it and kills/restarts the current turn within seconds.
+  Bash commands still require confirmation in both modes, by design —
+  TeamHub has no authentication, so removing that gate too would make a
+  crafted interrupt reason a real code-execution risk.
