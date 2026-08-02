@@ -1,7 +1,7 @@
 {
   "name": "teamhub-team",
-  "description": "TeamHub Team Protocol — Team Lead / Developer / Tester / Project Planner skills for running a multi-agent Claude Code team (one human-driven Lead session plans and assigns work, Developer sessions write code, Tester sessions verify it and report bugs), backed by a self-hosted, project-aware TeamHub MCP server. Requires the teamhub MCP server running and wired into .mcp.json — see this plugin's README. Supports an optional auto/manual mode with real mid-task interrupt from the Lead.",
-  "version": "1.3.0",
+  "description": "TeamHub Team Protocol — Team Lead / Developer / Tester / Analyst / Project Planner skills for running a multi-agent Claude Code team (one human-driven Lead session plans and assigns work — asking clarifying questions before it does — Developer sessions write code, Tester sessions verify it and report bugs, Analyst sessions clarify requirements and research without writing code), backed by a self-hosted, project-aware TeamHub MCP server with shared-token auth, live member presence, and an event-driven long-poll idle gate. Requires the teamhub MCP server running and wired into .mcp.json — see this plugin's README. Supports an optional auto/manual mode with real mid-task interrupt from the Lead.",
+  "version": "1.4.0",
   "author": {
     "name": "Deepak Chougale",
     "email": "mailboxdeepak15@gmail.com"
