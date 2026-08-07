@@ -31,6 +31,9 @@ Pick whichever skills you need:
 ```
 /plugin install teamhub-team@spyder
 ```
+```
+/plugin install agent-memory@spyder
+```
 
 ---
 
@@ -85,6 +88,16 @@ If you just want one skill without adding the full marketplace:
 - **Requires:** the `teamhub` MCP server running and wired into `.mcp.json`
   — see `skills/teamhub-team/README.md` after installing
 
+### 🧠 `agent-memory` — v1.0.0
+> Persistent, stack-agnostic project memory for AI coding sessions
+
+- Creates a `.claude/` folder at the project root: INDEX, AGENT rules/state,
+  per-session files (`sessions/`), per-task files (`tasks/`), ARCHITECTURE,
+  CODEBASE_MAP, DECISIONS, and optional `CONTEXT/` files
+- Progressive-disclosure design — slim core `SKILL.md` + on-demand `references/`
+  for low token use
+- Works across C#, C++, Python, Go, React, Next.js, Blazor, Ruby, Java, Rust
+
 ---
 
 ## 🗂️ Repo Structure
@@ -102,10 +115,14 @@ Spyder/
 │   │   ├── SKILL.md
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── reference/       (57 per-component docs)
-│   └── teamhub-team/
-│       ├── README.md
+│   ├── teamhub-team/
+│   │   ├── README.md
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── skills/           (team-lead, team-developer, tester, project-planner)
+│   └── agent-memory/
+│       ├── SKILL.md
 │       ├── .claude-plugin/plugin.json
-│       └── skills/           (team-lead, team-developer, tester, project-planner)
+│       └── references/       (templates, quick-reference, project-scan, lifecycle)
 └── dist/
     ├── jarvis-ui-react.plugin
     ├── jarvis-ui-blazor.plugin

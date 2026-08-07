@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Spyder — HUD-style Jarvis UI skills for React and Blazor (.NET)",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "homepage": "https://github.com/masterdeepak15/Spyder",
     "pluginRoot": "./skills"
   },
@@ -47,6 +47,18 @@
       },
       "category": "workflow",
       "keywords": ["multi-agent", "team", "mcp", "planner", "task-management", "workflow", "sprint", "developer", "tester", "team-lead"]
+    },
+    {
+      "name": "agent-memory",
+      "source": "./skills/agent-memory",
+      "description": "Agent Memory — creates and maintains a .claude/ folder at the project root: persistent, stack-agnostic AI memory with an INDEX, AGENT rules/state, per-session and per-task files, ARCHITECTURE, CODEBASE_MAP, DECISIONS, and optional CONTEXT/ files. Progressive-disclosure design (slim SKILL.md + on-demand references/) keeps token use low. Works across C#, C++, Python, Go, React, Next.js, Blazor, Ruby, Java, Rust and more.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Deepak Chougale",
+        "email": "mailboxdeepak15@gmail.com"
+      },
+      "category": "workflow",
+      "keywords": ["memory", "context", "session", "handoff", "project-scan", "documentation", "stack-agnostic", "token-efficient"]
     }
   ]
 }
