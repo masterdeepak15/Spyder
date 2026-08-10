@@ -3,8 +3,9 @@ name: agent-memory
 description: >
   Creates and maintains a .claude/ folder at the project root: AI memory split into an INDEX,
   AGENT rules/state, a SESSION index (linking to one file per session in sessions/), a TASKS
-  index (linking to one file per task in tasks/), ARCHITECTURE, CODEBASE_MAP, DECISIONS, and
-  optional CONTEXT/ files (api, auth, database, frontend). Full templates and workflows live
+  index (linking to one file per task in tasks/), ARCHITECTURE, CODEBASE_MAP, a DECISIONS index
+  (linking to one file per ADR in DECISIONS/), and optional CONTEXT/ files (api, auth, database,
+  frontend). Full templates and workflows live
   in references/ — read only what's needed per turn to keep token use low.
   ALWAYS trigger when: starting a session in a project dir ("start session", "new session",
   "open project"); user says "init project" / "setup claude memory"; any code change, file
@@ -64,13 +65,17 @@ project-root/
 │   ├── TASKS.md              ← Task INDEX — table of every task, links into tasks/
 │   ├── ARCHITECTURE.md       ← System design, components, data flow
 │   ├── CODEBASE_MAP.md       ← Annotated file tree + key functions wiki
-│   ├── DECISIONS.md          ← ADR log: every technical decision + why
+│   ├── DECISIONS.md          ← ADR INDEX — table of every decision, links into DECISIONS/
 │   ├── tasks/                ← One file per task — full detail lives here, not in TASKS.md
 │   │   └── {ISO_DATE}_{kebab-task-name}.md
 │   ├── sessions/              ← One file per work session — full detail lives here, not in SESSION.md
 │   │   └── {ISO_DATE_TIME}_{kebab-session-topic}.md
+│   ├── DECISIONS/             ← One file per technical decision — full detail lives here, not in DECISIONS.md
+│   │   └── {ISO_DATE}_{kebab-decision}.md
 │   └── CONTEXT/              ← OPTIONAL — only if detected in code AND user confirms
-│       ├── api.md            ← (if project has API routes/endpoints)
+│       ├── api.md            ← (if project has API routes/endpoints) — INDEX, links into api/
+│       ├── api/               ← One file per controller/resource — full detail lives here, not in api.md
+│       │   └── {kebab-resource}.md
 │       ├── auth.md           ← (if project has auth/login/jwt/session)
 │       ├── database.md       ← (if project has schema/models/migrations)
 │       ├── frontend.md       ← (if project has frontend framework)
@@ -89,11 +94,11 @@ project-root/
 **Rule:** `AGENT.md` is always live — it reflects the current state of all other files.
 **Rule:** `INDEX.md` is the entry point — always accurate, always linkable.
 **Rule:** CONTEXT/ files are created ONLY after user confirmation. Never assume.
-**Rule:** `TASKS.md` and `SESSION.md` are INDEXES only — one row per task/session, linking to its file in `tasks/` or `sessions/`. Never write full detail directly into either index file. This keeps every read cheap: agents load a few index rows instead of one giant file that grows forever and burns tokens.
-**Rule:** Every task gets its own file at `tasks/{ISO_DATE}_{kebab-task-name}.md`. Every work session gets its own file at `sessions/{ISO_DATE_TIME}_{kebab-session-topic}.md`. One file per task, one file per session, forever — never reused or overwritten.
+**Rule:** `TASKS.md`, `SESSION.md`, `DECISIONS.md`, and `CONTEXT/api.md` are INDEXES only — one row per task/session/decision/resource, linking to its file in `tasks/`, `sessions/`, `DECISIONS/`, or `CONTEXT/api/`. Never write full detail directly into any index file. This keeps every read cheap: agents load a few index rows instead of one giant file that grows forever and burns tokens.
+**Rule:** Every task gets its own file at `tasks/{ISO_DATE}_{kebab-task-name}.md`. Every work session gets its own file at `sessions/{ISO_DATE_TIME}_{kebab-session-topic}.md`. Every technical decision gets its own file at `DECISIONS/{ISO_DATE}_{kebab-decision}.md`. Every API controller/resource gets its own file at `CONTEXT/api/{kebab-resource}.md`. One file per task, session, decision, or resource, forever — never reused or overwritten.
 **Rule:** This skill is stack-agnostic. Nothing in `.claude/` — file names, examples, or content — should ever hardcode a specific language, framework, or library. Everything is derived from the actual project being scanned.
 **Rule:** Never write any `.claude/` file with an unfilled `{placeholder}`. If a value can't be found, write: `"Not found in scan — check manually."`
-**Rule:** Surgical section edits only — never rewrite a whole `.claude/` file (the exception: a brand-new `tasks/{file}` or `sessions/{file}`, written fresh from its template).
+**Rule:** Surgical section edits only — never rewrite a whole `.claude/` file (the exception: a brand-new `tasks/{file}`, `sessions/{file}`, `DECISIONS/{file}`, or `CONTEXT/api/{file}`, written fresh from its template).
 
 ---
 
@@ -151,7 +156,7 @@ IF .claude/ does NOT exist:
 
 ### Step 4 — Load CONTEXT/ Files On Demand
 ```
-Working on API?          → read .claude/CONTEXT/api.md
+Working on API?          → read .claude/CONTEXT/api.md (index), then the linked CONTEXT/api/{resource}.md
 Auth issue?              → read .claude/CONTEXT/auth.md
 DB query/schema?         → read .claude/CONTEXT/database.md
 UI work?                 → read .claude/CONTEXT/frontend.md
@@ -161,7 +166,7 @@ Infra/deploy?            → read .claude/CONTEXT/infra.md
 Tests?                   → read .claude/CONTEXT/testing.md
 Mobile?                  → read .claude/CONTEXT/mobile.md
 Unknown territory?       → read .claude/CODEBASE_MAP.md
-Design change?           → read .claude/ARCHITECTURE.md + .claude/DECISIONS.md
+Design change?           → read .claude/ARCHITECTURE.md + .claude/DECISIONS.md (index) + linked DECISIONS/{file}
 ```
 
 ---
@@ -174,7 +179,7 @@ Every task/session state change and every code change maps to specific `.claude/
 |-----------|---------------------|-----|
 | A task is created, started, finished, or blocked | `references/lifecycle-and-updates.md` | Exact sequence of file updates for each state |
 | Any file created/deleted/renamed, new endpoint, schema change, dependency added, decision made, bug found | `references/lifecycle-and-updates.md` | "Auto-Update Map" — what changed → which files to touch |
-| Writing/updating INDEX.md, AGENT.md, SESSION.md, a `sessions/{file}`, TASKS.md, a `tasks/{file}`, ARCHITECTURE.md, CODEBASE_MAP.md, DECISIONS.md, or any CONTEXT/*.md | `references/templates.md` | The exact markdown format for that one file |
+| Writing/updating INDEX.md, AGENT.md, SESSION.md, a `sessions/{file}`, TASKS.md, a `tasks/{file}`, ARCHITECTURE.md, CODEBASE_MAP.md, DECISIONS.md, a `DECISIONS/{file}`, CONTEXT/api.md, a `CONTEXT/api/{file}`, or any other CONTEXT/*.md | `references/templates.md` | The exact markdown format for that one file |
 | `.claude/` doesn't exist yet, or user says "refresh wiki" / "rescan project" | `references/project-scan.md` | Bash scan commands + CONTEXT/ detection + confirmation flow |
 | User says "handoff", asks "what's the status?", or a brand-new agent needs to get oriented fast | `references/quick-reference.md` | 5-minute onboarding, handoff message template, full command table |
 

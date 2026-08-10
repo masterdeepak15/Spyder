@@ -12,8 +12,10 @@
 - `.claude/tasks/{ISO_DATE}_{kebab-task-name}.md` — Individual Task File
 - `.claude/ARCHITECTURE.md` — System Design
 - `.claude/CODEBASE_MAP.md` — LLM Code Wiki
-- `.claude/DECISIONS.md` — ADR Log
-- `.claude/CONTEXT/api.md`
+- `.claude/DECISIONS.md` — ADR INDEX (links into `DECISIONS/`)
+- `.claude/DECISIONS/{ISO_DATE}_{kebab-decision}.md` — Individual ADR File
+- `.claude/CONTEXT/api.md` — API INDEX (links into `CONTEXT/api/`)
+- `.claude/CONTEXT/api/{kebab-resource}.md` — Individual Controller/Resource File
 - `.claude/CONTEXT/auth.md`
 - `.claude/CONTEXT/database.md`
 - `.claude/CONTEXT/frontend.md`
@@ -26,7 +28,7 @@
 CORE (always):
 1. ARCHITECTURE.md  (system design — read actual code first)
 2. CODEBASE_MAP.md  (code wiki — built from real file tree + read source files)
-3. DECISIONS.md     (empty log, ready for entries)
+3. DECISIONS.md     (empty index, ready for entries — DECISIONS/ created on first ADR)
 4. TASKS.md         (index — start empty or with whatever tasks are known)
 5. SESSION.md       (index — written just before the first sessions/ file)
 6. sessions/{first session file}  (this session's own file — written last among core)
@@ -61,7 +63,7 @@ CONTEXT/ (only confirmed ones, after core):
 | [TASKS.md](TASKS.md) | Task INDEX — links to `tasks/*.md` | Picking up work |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System design + components | Understanding the system |
 | [CODEBASE_MAP.md](CODEBASE_MAP.md) | Annotated code tree + key functions | Navigating code |
-| [DECISIONS.md](DECISIONS.md) | ADR log — technical decisions | Before changing architecture |
+| [DECISIONS.md](DECISIONS.md) | ADR INDEX — links to `DECISIONS/*.md` | Before changing architecture |
 {CONTEXT_TABLE_ROWS — add rows only for files that actually exist}
 
 ---
@@ -131,7 +133,7 @@ If no .env.example found: "Check with team — no .env.example found in repo"
 2. Read `.claude/SESSION.md` (index) before writing any code — find "📍 Current Session", open its linked `sessions/{file}` for what was in progress
 3. Create this session's own `sessions/{ISO_DATE_TIME}_{kebab-topic}.md` at the start (Step 3); update it as work happens; finalize it when work ends
 4. Move tasks in `.claude/TASKS.md` as status changes; keep task detail in the linked `tasks/{file}`, not in TASKS.md itself
-5. Log every technical decision in `.claude/DECISIONS.md` with WHY
+5. Log every technical decision as its own file in `.claude/DECISIONS/{ISO_DATE}_{kebab-decision}.md` with WHY, and add a row to `.claude/DECISIONS.md` — never write ADR detail into DECISIONS.md itself
 
 ### Code rules:
 6. Update `.claude/CODEBASE_MAP.md` when any file is created, deleted, or renamed
@@ -143,7 +145,8 @@ If no .env.example found: "Check with team — no .env.example found in repo"
 - Skip updating `.claude/` files after making changes
 - Leave a session file's "In Progress" / "Next Agent Should Do" stale when a session ends
 - Write task or session detail directly into `TASKS.md` or `SESSION.md` — those are indexes only
-- Make architecture changes without a DECISIONS.md entry
+- Write ADR detail directly into `DECISIONS.md` — it is an index only, full detail goes in `DECISIONS/{file}`
+- Make architecture changes without a DECISIONS/{file} entry
 - Create or update a CONTEXT/ file that was not confirmed by the user
 
 ---
@@ -169,7 +172,7 @@ If no .env.example found: "Check with team — no .env.example found in repo"
 | TASKS.md | {datetime} | {N} active, {N} backlog, {N} blocked |
 | CODEBASE_MAP.md | {datetime} | {N} modules mapped |
 | ARCHITECTURE.md | {datetime} | {last change summary} |
-| DECISIONS.md | {datetime} | {N} decisions logged |
+| DECISIONS.md | {datetime} | {N} decisions logged (index → `DECISIONS/`) |
 {CONTEXT rows — only list files that actually exist}
 ```
 
@@ -459,17 +462,42 @@ The most important file for code navigation. Annotated tree + key functions.
 
 ---
 
-### `.claude/DECISIONS.md` — ADR Log
+### `.claude/DECISIONS.md` — ADR INDEX (wiki-style — links only, no detail)
+
+`DECISIONS.md` never holds ADR detail. It is a lookup table: one row per decision, each row linking to its full file in `DECISIONS/`. Full context, reasoning, and impact live inside that decision's own file, not here. This keeps it cheap to read no matter how many decisions the project accumulates.
 
 ```markdown
-# DECISIONS.md — Architecture Decision Records
-> Every significant technical decision logged here with context and reason.
-> Future agents: read before changing architecture or patterns.
+# DECISIONS.md — ADR Index
+> Updated: {ISO_DATETIME}
+> Full detail for any decision lives in `DECISIONS/{filename}` — this file only indexes and describes.
+> Future agents: scan this table before changing architecture or patterns.
 
 ---
 
-## ADR-{N}: {Short Decision Title}
-**Date:** {date} | **Session:** #{N} | **Status:** Accepted
+## 📜 Decisions
+<!-- Newest first. One row per decision, ever. -->
+| ID | Decision | File | Date | Session | Status |
+|----|----------|------|------|---------|--------|
+| ADR-{N} | {one-line decision title} | [DECISIONS/{ISO_DATE}_{kebab-decision}.md](DECISIONS/{ISO_DATE}_{kebab-decision}.md) | {date} | #{N} | Accepted |
+```
+
+**Rule:** The "Decision" column stays one line — enough to recognize the decision, not explain it. Anything more belongs in the linked file.
+**Rule:** New rows go at the TOP of the table — newest first.
+
+---
+
+### `.claude/DECISIONS/{ISO_DATE}_{kebab-decision}.md` — Individual ADR File
+
+One file per technical decision. Created the moment a decision is logged — never appended to or reused for a later, different decision (a *revised* decision gets its own new file and the old one's Status is updated to Superseded).
+
+**Filename rule:** `{YYYY-MM-DD}_{kebab-case-decision-title}.md` — date is the day the decision was made. Example: `2026-07-21_switch-mqtt-to-tcp.md`.
+
+```markdown
+# ADR-{N}: {Short Decision Title}
+> Date: {ISO_DATETIME} | Session: #{N} | Status: {Accepted / Superseded / Deprecated}
+> File: `DECISIONS/{ISO_DATE}_{kebab-decision}.md`
+
+---
 
 **Context:** {What situation or problem forced this decision?}
 
@@ -481,18 +509,24 @@ The most important file for code navigation. Annotated tree + key functions.
 - ✅ {positive outcome}
 - ⚠️ {constraint or tradeoff this creates — be honest}
 
----
-<!-- New ADRs go at the TOP — newest first -->
+**Related**
+- Supersedes: {ADR-{N} or "none"}
+- Relates to: {T-{N}, CONTEXT/{file}.md, or "none"}
 ```
 
+**Rule:** Update `DECISIONS.md` with a new row every time a `DECISIONS/{file}` is created — the index is just the map.
+
 ---
 
-### `.claude/CONTEXT/api.md`
+### `.claude/CONTEXT/api.md` — API INDEX (wiki-style — links only, no detail)
+
+`CONTEXT/api.md` never holds full endpoint detail. It is a lookup table: one row per controller/resource, each row linking to its full file in `CONTEXT/api/`. Full endpoint list, request/response shapes, and errors live inside that resource's own file, not here. This keeps it cheap to read no matter how many controllers the project has.
 
 ```markdown
-# API Reference
+# CONTEXT/api.md — API Index
 > Updated: {ISO_DATETIME}
 > Base URL: `{http://localhost:PORT/api}` | Auth: `Authorization: Bearer {token}`
+> Full endpoint detail for any resource lives in `CONTEXT/api/{filename}` — this file only indexes.
 
 ---
 
@@ -502,9 +536,32 @@ Get token via `POST /api/auth/login`.
 
 ---
 
-## Endpoints
+## Controllers / Resources
+<!-- One row per controller/resource. -->
+| Resource | File | Base Path | Controller Source |
+|----------|------|-----------|-------------------|
+| {Resource} | [api/{kebab-resource}.md](api/{kebab-resource}.md) | `/api/{resource}` | `{path/to/controller}` |
+```
 
-### {Resource} — `{/api/resource}`
+**Rule:** The "Resource" table stays index-only — one row per controller. Anything more (endpoint list, bodies, errors) belongs in the linked file.
+**Rule:** Group by controller if the project has one file per resource; otherwise group by logical resource/domain (whatever a caller would look up).
+
+---
+
+### `.claude/CONTEXT/api/{kebab-resource}.md` — Individual Controller/Resource File
+
+One file per controller/resource. Created the moment that controller/resource is documented — never merged with another resource's file.
+
+**Filename rule:** `{kebab-case-resource-name}.md` — e.g. `users.md`, `tasks.md`, `auth.md`.
+
+```markdown
+# {Resource} API
+> Updated: {ISO_DATETIME}
+> Controller: `{path/to/controller file}`
+
+---
+
+## Endpoints
 
 | Method | Path | Description | Auth |
 |--------|------|-------------|------|
@@ -524,6 +581,8 @@ Get token via `POST /api/auth/login`.
 ```
 **Errors:** `400` validation | `401` unauthorized | `404` not found | `409` conflict
 ```
+
+**Rule:** Update `CONTEXT/api.md` with a new/updated row every time a `CONTEXT/api/{file}` is created or its base path changes — the index is just the map.
 
 ---
 

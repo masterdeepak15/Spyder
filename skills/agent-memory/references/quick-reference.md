@@ -59,7 +59,7 @@ Full context: .claude/ARCHITECTURE.md, CODEBASE_MAP.md, CONTEXT/
 | `"update wiki"` / `"sync .claude"` | Scan for changes → update all stale files |
 | `"handoff to [AI]"` | Generate cross-agent handoff message |
 | `"refresh codebase map"` | Rescan source files → update CODEBASE_MAP.md |
-| `"log decision: [X]"` | Prepend new ADR to DECISIONS.md |
+| `"log decision: [X]"` | Create `DECISIONS/{ISO_DATE}_{kebab-decision}.md`; add row to top of DECISIONS.md index |
 | `"add task: [X]"` | Create `tasks/{ISO_DATE}_{kebab-name}.md`; add row to TASKS.md backlog with priority |
 | `"block task [ID]: [reason]"` | Move task to Blocked in TASKS.md; update `tasks/{file}` Blocker section; note it in `sessions/{current file}` |
 | `"show task [ID]"` / `"open task [ID]"` | Look up ID in TASKS.md → read + summarize its `tasks/{file}` |

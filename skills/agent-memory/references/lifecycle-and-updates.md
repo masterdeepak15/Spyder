@@ -85,15 +85,15 @@ BACKLOG → ACTIVE → DONE
 | **Any file deleted** | `CODEBASE_MAP.md`, `AGENT.md` | Remove from tree; bump state |
 | **Any file renamed** | `CODEBASE_MAP.md`, `AGENT.md` | Update path; bump state |
 | Function/class added | `CODEBASE_MAP.md` | Add to Key Functions table |
-| New API endpoint | `CONTEXT/api.md`, `AGENT.md` | Add endpoint row; bump state |
-| API contract changed | `CONTEXT/api.md` | Update that endpoint |
+| New API endpoint | `CONTEXT/api/{resource file}`, `CONTEXT/api.md`, `AGENT.md` | Add endpoint row in resource file; add/update index row; bump state |
+| API contract changed | `CONTEXT/api/{resource file}` | Update that endpoint |
 | DB table/column added | `CONTEXT/database.md`, `AGENT.md` | Add to schema; bump state |
 | DB migration written | `CONTEXT/database.md` | Note migration name + what it does |
 | Auth flow changed | `CONTEXT/auth.md`, `AGENT.md` | Update flow section; bump state |
 | New dependency added | `ARCHITECTURE.md` | Add to External Services |
-| Architecture changed | `ARCHITECTURE.md` + `DECISIONS.md` | Update diagram + log ADR |
+| Architecture changed | `ARCHITECTURE.md` + `DECISIONS/{new file}` + `DECISIONS.md` | Update diagram + create ADR file + add index row |
 | Bug/gotcha found | `CODEBASE_MAP.md`, `sessions/{current file}` | Add to Gotchas; add to Discoveries |
-| Technical decision made | `DECISIONS.md`, `AGENT.md` | New ADR (newest first); bump state |
+| Technical decision made | `DECISIONS/{new file}`, `DECISIONS.md`, `AGENT.md` | Create ADR file; add index row (newest first); bump state |
 | Task done | `TASKS.md`, `tasks/{file}`, `sessions/{current file}`, `AGENT.md` | Move row to Done; update file Status + check Acceptance Criteria; ✅ Done; update state |
 | Task blocked | `TASKS.md`, `tasks/{file}`, `sessions/{current file}`, `AGENT.md` | Move row to Blocked; fill file's Blocker section; update state |
 | Session ended | `sessions/{current file}`, `SESSION.md`, `TASKS.md`, `AGENT.md`, `INDEX.md` | Finalize session file; index history row; timestamps; live state |
