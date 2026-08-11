@@ -7,11 +7,20 @@ description: >
   (linking to one file per ADR in DECISIONS/), and optional CONTEXT/ files (api, auth, database,
   frontend). Full templates and workflows live
   in references/ — read only what's needed per turn to keep token use low.
+  This is an AMBIENT skill — it activates automatically, with no slash command and no explicit
+  request needed, any time work happens in a recognized project directory (see Section 0 gate).
   ALWAYS trigger when: starting a session in a project dir ("start session", "new session",
-  "open project"); user says "init project" / "setup claude memory"; any code change, file
-  added/deleted, feature/bugfix; switching AI tools or "handoff"; "what's the status?" /
-  "where were we?"; a task starts, finishes, or gets blocked. AGENT.md always reflects live
-  state — keep .claude/ in sync with the codebase at all times.
+  "open project"); user says "init project" / "setup claude memory"; ANY user instruction that
+  asks for work to be done in the project — "build X", "add Y", "implement Z", "fix this",
+  "create a feature", "refactor", "let's work on", "continue", or any task-shaped request, even
+  without the words "session" or "task" — plan/brainstorm silently against .claude/ context
+  before writing code; any code change, file added/deleted, feature/bugfix, dependency added,
+  schema change, new endpoint, or bug found — update the relevant .claude/ file(s) immediately,
+  without waiting to be asked; switching AI tools or "handoff"; "what's the status?" /
+  "where were we?"; a task starts, finishes, or gets blocked; end of a turn where meaningful
+  work happened — do a silent checkpoint update before responding. AGENT.md always reflects live
+  state — keep .claude/ in sync with the codebase at all times, proactively, without the user
+  needing to ask for an update or invoke this skill by name.
 ---
 
 # Agent Memory — `.claude/` Folder System 🧠
@@ -21,6 +30,42 @@ description: >
 All AI memory lives inside `.claude/` — separate from project source code, readable by any AI.
 
 **This file is deliberately short.** Everything you need for routine session work is here. Detailed templates and long procedures live in `references/` — go there only when you actually need to write one specific file. Don't preload reference files "just in case."
+
+---
+
+## 0.a Ambient Activation — No Command Needed
+
+This skill is **not** invoked with a slash command. It runs in the background of every turn:
+
+```
+On EVERY user message, once the Section 0 gate says "real project":
+
+1. BEFORE doing the work:
+   - If .claude/ doesn't exist yet → initialize it (Section 2, Step 2).
+   - If it exists → silently check .claude/AGENT.md + TASKS.md for relevant
+     context BEFORE planning the approach. Let existing decisions, architecture,
+     and open tasks shape the plan — don't re-derive from scratch or re-ask
+     the user things already answered in .claude/.
+   - Brainstorm/plan the task against that context first, THEN act.
+     This applies to ANY task-shaped request — "add", "build", "fix",
+     "implement", "refactor", "debug", "continue", etc. — not just
+     messages that literally say "session" or "task".
+
+2. WHILE doing the work:
+   - Treat every meaningful change (file added/deleted, endpoint added,
+     schema changed, dependency added, decision made, bug found/fixed) as
+     an automatic trigger to update the matching .claude/ file — see
+     Section 3's table. Do this inline, don't batch it up for the user to request.
+
+3. AFTER the work, before ending the turn:
+   - Do a silent checkpoint: update the current session file, TASKS.md/
+     tasks/{file}, and AGENT.md's live state so they reflect what just
+     happened. No need to announce every file touched — a one-line
+     mention ("📝 updated .claude/TASKS.md") is enough.
+
+The user should never need to say "update the memory" or "/agent-memory" —
+staying in sync is this skill's job on every turn, silently, by default.
+```
 
 ---
 

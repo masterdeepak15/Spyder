@@ -51,8 +51,8 @@
     {
       "name": "agent-memory",
       "source": "./skills/agent-memory",
-      "description": "Agent Memory — creates and maintains a .claude/ folder at the project root: persistent, stack-agnostic AI memory with an INDEX, AGENT rules/state, per-session, per-task, and per-decision files, ARCHITECTURE, CODEBASE_MAP, a DECISIONS index, and optional CONTEXT/ files (including a per-controller API index). Progressive-disclosure design (slim SKILL.md + on-demand references/) keeps token use low. Works across C#, C++, Python, Go, React, Next.js, Blazor, Ruby, Java, Rust and more.",
-      "version": "1.1.0",
+      "description": "Agent Memory — creates and maintains a .claude/ folder at the project root: persistent, stack-agnostic AI memory with an INDEX, AGENT rules/state, per-session, per-task, and per-decision files, ARCHITECTURE, CODEBASE_MAP, a DECISIONS index, and optional CONTEXT/ files (including a per-controller API index). Activates ambiently — no slash command needed: auto-plans against existing memory before new work and auto-updates the relevant files as work happens. Progressive-disclosure design (slim SKILL.md + on-demand references/) keeps token use low. Works across C#, C++, Python, Go, React, Next.js, Blazor, Ruby, Java, Rust and more.",
+      "version": "1.2.0",
       "author": {
         "name": "Deepak Chougale",
         "email": "mailboxdeepak15@gmail.com"
