@@ -34,6 +34,9 @@ Pick whichever skills you need:
 ```
 /plugin install agent-memory@spyder
 ```
+```
+/plugin install assistant@spyder
+```
 
 ---
 
@@ -100,6 +103,22 @@ If you just want one skill without adding the full marketplace:
 
 ---
 
+### 🤖 `assistant` — v1.0.0
+> Personal AI life companion (JARVIS-style) with wiki-based long-term memory
+
+- Persona (name/gender/tone) chosen at onboarding — becomes *your* assistant
+- Memory lives in `~/.assistant/`: one `INDEX.md` entry point linking to
+  topic indexes (`IDENTITY`, `FAMILY`, `PROJECTS`, `TASKS`, `DAILY`,
+  `HEALTH`, `REMINDERS`, `KNOWLEDGE`), each linking into its own subfolder
+  of small per-item files — stays cheap even after years of history
+- Ambient activation — no slash command needed
+- Cross-skill aware: if a project already has its own memory skill (e.g.
+  `agent-memory`), stores only a pointer instead of duplicating detail
+- Handles PC control, Gmail, GitHub, calendar, daily check-ins, reminders,
+  and family updates
+
+---
+
 ## 🗂️ Repo Structure
 
 ```
@@ -119,10 +138,14 @@ Spyder/
 │   │   ├── README.md
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── skills/           (team-lead, team-developer, tester, project-planner)
-│   └── agent-memory/
+│   ├── agent-memory/
+│   │   ├── SKILL.md
+│   │   ├── .claude-plugin/plugin.json
+│   │   └── references/       (templates, quick-reference, project-scan, lifecycle)
+│   └── assistant/
 │       ├── SKILL.md
 │       ├── .claude-plugin/plugin.json
-│       └── references/       (templates, quick-reference, project-scan, lifecycle)
+│       └── references/       (onboarding, templates, lifecycle, personality, family)
 └── dist/
     ├── jarvis-ui-react.plugin
     ├── jarvis-ui-blazor.plugin
