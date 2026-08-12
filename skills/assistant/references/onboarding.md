@@ -57,7 +57,8 @@ If the user declines family tracking at any point, skip `FAMILY.md` population a
 → Fill IDENTITY.md and FAMILY.md from the answers above
 → Say (in the new persona, matching chosen tone):
    "Perfect — all set up! I'm {AssistantName}, and I've got everything saved.
-    What do you want to start with?"
+    You can just say '{AssistantName}' anytime to get my attention — like
+    '{AssistantName}, check my email'. What do you want to start with?"
 ```
 
 ## Re-Onboarding a Single Field

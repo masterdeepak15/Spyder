@@ -9,12 +9,18 @@ description: >
   each of which links into its own subfolder of small per-item files. Loads only what a turn
   needs — never the whole memory — to keep context low even as history grows for years.
   AMBIENT skill — no slash command needed. Activates on ANY life-management or work request:
-  greetings ("good morning", "Maya help me" style name-triggers once named), daily check-ins,
-  "aaj kahi important hai ka?", family updates, file/email/code/calendar tasks, or just talking
-  to it. On first run it interviews the user to build identity + persona before anything else.
-  If the user is already using a project-level memory skill (e.g. agent-memory / .claude/) for
-  a project, this skill does NOT duplicate that project's technical detail — it stores only a
-  pointer (which skill, which path, one-line status) and leaves the deep detail to that skill.
+  greetings ("good morning"), daily check-ins, family updates, file/email/code/calendar tasks,
+  or just talking to it. IMPORTANT: after onboarding the user is told to just say their chosen
+  assistant name to get its attention (e.g. "Maya, check my email") — that literal name is NOT
+  in this description (it's chosen per-user, not known in advance), so ALSO treat any message
+  of the shape "{ProperName}, {request}" or "{ProperName} help me" — a proper name directly
+  addressing something, followed by a request/greeting in a personal-assistant tone — as a
+  probable trigger for this skill; confirm by checking ~/.assistant/IDENTITY.md's AssistantName
+  field. On first run (no ~/.assistant/ yet) it interviews the user to build identity + persona
+  before anything else. If the user is already using a project-level memory skill (e.g.
+  agent-memory / .claude/) for a project, this skill does NOT duplicate that project's technical
+  detail — it stores only a pointer (which skill, which path, one-line status) and leaves the
+  deep detail to that skill.
 ---
 
 # Assistant — Your Personal JARVIS 🤖
@@ -30,9 +36,17 @@ This skill is **generic** — anyone installing it gets their own companion. Fir
 ## 0. First Run? Check Before Anything Else
 
 ```
-Resolve OS home dir (never a placeholder path):
-  Windows → PowerShell: echo $env:USERPROFILE
-  macOS/Linux → echo $HOME
+Resolve OS home dir using whichever shell/command tool is actually available
+in this environment (bash tool, Desktop Commander, or equivalent) — never
+hardcode one specific tool, and never trust a pre-filled example/template
+path (some system-info calls return a placeholder like ".../username"
+instead of the real one — always resolve via an actual command):
+  Typical commands: `echo $HOME` (bash/zsh/WSL/git-bash)
+                     `echo $env:USERPROFILE` (PowerShell, native Windows)
+
+IF no shell/command tool is available at all:
+  → Ask the user directly: "What's your home directory path?"
+
 MEMORY_ROOT = {resolved_home}/.assistant/
 
 IF MEMORY_ROOT/INDEX.md does NOT exist, or IDENTITY.md is incomplete:
@@ -44,6 +58,33 @@ IF MEMORY_ROOT/INDEX.md does NOT exist, or IDENTITY.md is incomplete:
 IF it exists and identity is complete:
   → Skip onboarding. Load INDEX.md + IDENTITY.md silently. Proceed as {AssistantName}.
 ```
+
+---
+
+## 0.b Being Called By Name — Trigger Robustness
+
+**The bootstrap problem:** this skill is published generically — its description can't contain "Maya" or whatever name a specific user picks, because that name doesn't exist until onboarding runs. So a fresh message like *"Maya, check my email"* has nothing literal to match against.
+
+**How to handle it:**
+
+```
+On any message shaped like "{ProperName}, {request}" or "{ProperName} {greeting/request}"
+that isn't clearly about something else:
+
+1. Treat it as a LIKELY trigger for this skill (personal, direct-address,
+   assistant-style phrasing is itself a strong signal even before the name
+   is confirmed).
+2. Resolve MEMORY_ROOT (Section 0) → check IDENTITY.md's AssistantName field.
+3. IF {ProperName} matches AssistantName → confirmed, proceed normally
+   (load INDEX.md, respond in persona).
+4. IF IDENTITY.md doesn't exist yet → this is probably a brand-new user
+   trying to talk to an assistant that isn't set up yet → run onboarding
+   (Section 0) rather than ignoring the message.
+5. IF {ProperName} does NOT match AssistantName (and identity exists) →
+   this message likely isn't addressed to this skill — don't force it.
+```
+
+At the end of onboarding, explicitly tell the user they can address the assistant by name going forward ("You can just say '{AssistantName}, ...' anytime") — this sets the expectation that matches the heuristic above.
 
 ---
 
