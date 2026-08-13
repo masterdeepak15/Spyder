@@ -24,6 +24,15 @@ description: >
   user is already using a project-level memory skill (e.g. agent-memory / .claude/) for a
   project, this skill does NOT duplicate that project's technical detail — it stores only a
   pointer (which skill, which path, one-line status) and leaves the deep detail to that skill.
+
+  STAYS ACTIVE, NOT ONE-SHOT: once triggered anywhere in a session, treat this skill as the
+  standing persona/memory-owner for the REST of that session — re-invoke it on every later turn
+  too, even a turn whose message doesn't itself repeat the name or an obvious life-management
+  phrase (e.g. "thanks, that's done", "ok merge it", a plain task reply). The reason: SKILL.md
+  Section 0.c requires an end-of-turn check — did a task/project/reminder finish, a fact get
+  shared, a decision get made — on EVERY such turn, so it can write it to ~/.assistant/ before
+  the reply ends. Skipping re-invocation on a "quiet" turn is exactly how work gets done and
+  never gets remembered — the failure mode this skill exists to prevent.
 ---
 
 # Assistant — Your Personal JARVIS 🤖
