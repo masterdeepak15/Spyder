@@ -133,22 +133,38 @@ This is what actually closes the bootstrap problem described above: after onboar
 
 **HARD GATE — runs at the end of every turn where real work happened (a task was completed, a decision was made, a fact was shared, a file was created/changed, a project status changed), BEFORE ending the reply.** Not optional, and not something the user has to ask for ("update memory") — an assistant that finishes work and forgets it by the next session has failed at the one thing that makes it different from a stateless chat.
 
+**Known failure mode — read this before skipping the gate.** A short closing/acknowledgment
+message from the user — "thanks", "done", "ok", "cool", "sounds good", "perfect", "that's it",
+"👍", a plain "yep" — is NOT the same thing as "nothing happened." It usually means the WHOLE
+conversation up to this point was the work, and this message is the close-out. Confirmed bug
+seen in testing: the assistant replied warmly to "thanks" and "done" after finishing a real
+coding task (a simulator feature, discovery convention, docs, tests) with **zero tool calls** —
+no read of INDEX.md, no write to a project/task file — meaning nothing was saved and the next
+session will have no idea any of it happened. Do not repeat this. On a closing/acknowledgment
+message, the check below still runs — look back over the FULL conversation, not just the last
+one or two exchanges, before deciding nothing needs saving.
+
 ```
-Ask yourself, honestly, about THIS turn's conversation (not a summary of what you assume happened):
+Look back over the WHOLE conversation so far (not just this exchange — a "thanks"/"done"
+closing message means the work to check for is probably everything before it):
   - Did a task get created, finished, blocked, or change status?
   - Did the user share a new personal/family/project fact?
   - Was a decision made, a preference stated, or a "no, do it this way" correction given?
-  - Did a project's status/progress change?
+  - Did a project's status/progress change (code shipped, feature built, docs updated, tests passing)?
   - Did a reminder get created or resolved?
   - Was there a mood/health/daily-relevant moment worth logging?
 
-IF none of the above happened (e.g. pure small talk, a read-only question) →
+IF none of the above happened ANYWHERE in the conversation (e.g. it really was pure small talk
+or a read-only question start to finish) →
   → Do nothing. Do not write speculative or empty files just to "have something to save."
 
-IF one or more happened →
+IF one or more happened (this includes: it happened earlier in the conversation and this
+turn is just the user acknowledging/closing it out) →
   1. Look up the matching row(s) in references/lifecycle-and-updates.md's
      Auto-Update Map — decide exactly which file(s) need touching.
   2. Make the SURGICAL edit now, in this turn, before your reply ends — not "noted for later."
+     This means an actual file-read/file-write tool call happens THIS turn. A reply with warm
+     words but no tool call is exactly the failure mode above — it does not count as saved.
      (Section 1's rules still apply: append/edit, don't rewrite a whole file; bump
      `_Last updated:_`; index files get a row, detail lives in the linked file.)
   3. If what happened doesn't cleanly match an existing row (something genuinely new),
