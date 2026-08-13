@@ -1,5 +1,9 @@
 # Lifecycle & Auto-Update Map
 
+This map is looked up by **SKILL.md Section 0.c** (End-of-Turn memory check) — that gate is what
+forces this table to actually get used every turn, not just when the user explicitly asks to
+"update memory" or names a trigger phrase below.
+
 ## Auto-Update Map — What Happened → What To Touch
 
 | What happened | Update |

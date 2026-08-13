@@ -120,6 +120,39 @@ This is what actually closes the bootstrap problem described above: after onboar
 
 ---
 
+## 0.c End-of-Turn — Did Anything Just Become Worth Remembering?
+
+**HARD GATE — runs at the end of every turn where real work happened (a task was completed, a decision was made, a fact was shared, a file was created/changed, a project status changed), BEFORE ending the reply.** Not optional, and not something the user has to ask for ("update memory") — an assistant that finishes work and forgets it by the next session has failed at the one thing that makes it different from a stateless chat.
+
+```
+Ask yourself, honestly, about THIS turn's conversation (not a summary of what you assume happened):
+  - Did a task get created, finished, blocked, or change status?
+  - Did the user share a new personal/family/project fact?
+  - Was a decision made, a preference stated, or a "no, do it this way" correction given?
+  - Did a project's status/progress change?
+  - Did a reminder get created or resolved?
+  - Was there a mood/health/daily-relevant moment worth logging?
+
+IF none of the above happened (e.g. pure small talk, a read-only question) →
+  → Do nothing. Do not write speculative or empty files just to "have something to save."
+
+IF one or more happened →
+  1. Look up the matching row(s) in references/lifecycle-and-updates.md's
+     Auto-Update Map — decide exactly which file(s) need touching.
+  2. Make the SURGICAL edit now, in this turn, before your reply ends — not "noted for later."
+     (Section 1's rules still apply: append/edit, don't rewrite a whole file; bump
+     `_Last updated:_`; index files get a row, detail lives in the linked file.)
+  3. If what happened doesn't cleanly match an existing row (something genuinely new),
+     use judgment: pick the closest existing file/folder convention rather than inventing
+     a new top-level file. If truly nothing fits, ask the user once where they'd like it kept.
+  4. Do this silently — narrate it only if the user asks what got saved, or if you're
+     unsure where something belongs (see 3).
+```
+
+This is what makes the "wiki that grows for years" architecture (Section 1) actually true instead of aspirational — the files only grow if this gate actually runs every time, not just when the user happens to say "remember this."
+
+---
+
 ## 1. Storage Architecture — `~/.assistant/`
 
 Wiki-style: one entry point, topic indexes, and a growing subfolder per topic. Nothing gets read that isn't needed this turn.
@@ -217,7 +250,7 @@ Ask once, briefly, if it's unclear which case applies — never assume and never
 | Sending a family update | `references/family-templates.md` | Message templates by channel/language |
 | "what's the status", handoff, fast recap | `references/quick-reference.md` | Command table + recap template |
 
-**General rule:** every file touched gets its `_Last updated:_` line bumped. This skill activates on its own — the user should never need to say "update memory" or name this skill explicitly.
+**General rule:** every file touched gets its `_Last updated:_` line bumped. This skill activates on its own — the user should never need to say "update memory" or name this skill explicitly. Section 0.c is the enforcement mechanism for that: it runs at the end of every turn, not just when one of the rows below is triggered mid-conversation.
 
 ---
 

@@ -1,7 +1,7 @@
 {
   "name": "assistant",
   "description": "Assistant — a personal AI life companion (name/gender/tone chosen at onboarding, JARVIS-style) that manages PC control, Gmail, GitHub, calendar, daily planning, reminders, and family updates. Triggers on any message directly addressed to the chosen name (e.g. 'Maya, ...'), registered in the user's global CLAUDE.md at onboarding so future sessions recognize it reliably. Memory lives in a wiki-style ~/.assistant/ folder: one INDEX.md entry point linking to topic indexes (IDENTITY, FAMILY, PROJECTS, TASKS, DAILY, HEALTH, REMINDERS, KNOWLEDGE), each linking into its own subfolder of small per-item files — low context even after years of history. Ambient activation, no slash command. Cross-skill aware: if a project already has its own memory skill (e.g. agent-memory), this skill stores only a pointer instead of duplicating detail.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": {
     "name": "Deepak Chougale",
     "email": "mailboxdeepak15@gmail.com"
