@@ -103,19 +103,15 @@ If you just want one skill without adding the full marketplace:
 
 ---
 
-### 🤖 `assistant` — v1.0.0
-> Personal AI life companion (JARVIS-style) with wiki-based long-term memory
+### 🤖 `assistant` — v2.1.0
+> Personal AI memory in one skill: a living tree of linked notes about you, plus a `.claude/` folder for every coding project
 
-- Persona (name/gender/tone) chosen at onboarding — becomes *your* assistant
-- Memory lives in `~/.assistant/`: one `INDEX.md` entry point linking to
-  topic indexes (`IDENTITY`, `FAMILY`, `PROJECTS`, `TASKS`, `DAILY`,
-  `HEALTH`, `REMINDERS`, `KNOWLEDGE`), each linking into its own subfolder
-  of small per-item files — stays cheap even after years of history
-- Ambient activation — no slash command needed
-- Cross-skill aware: if a project already has its own memory skill (e.g.
-  `agent-memory`), stores only a pointer instead of duplicating detail
-- Handles PC control, Gmail, GitHub, calendar, daily check-ins, reminders,
-  and family updates
+- **Automatic** — no slash command needed. It loads at the start of every conversation, saves lasting facts as they happen, and runs an end-of-turn check
+- **Dynamic memory tree** in `~/.assistant/memory/`: no fixed folders. New topics get their own folder and `INDEX.md`, linked from the parent at once with an `Up:` link back, so every note is reachable from the root `INDEX.md`
+- **Coding projects** (built in): a `.claude/` folder at the project root with INDEX, AGENT rules/state, sessions, tasks, ARCHITECTURE, CODEBASE_MAP, DECISIONS and optional `CONTEXT/`. Project files stay in the project; the personal tree keeps only one pointer note per project
+- **Optional safety checker**: `scripts/check_memory.py` (read only, Python) reports orphan notes, broken links and misplaced project files
+- Works in Claude Code, Claude Desktop or any AI that can read and write files. Plain Markdown, no runtime needed
+- `agent-memory` stays available for existing users; `assistant` v2 includes the same `.claude/` flow
 
 ---
 
@@ -145,7 +141,8 @@ Spyder/
 │   └── assistant/
 │       ├── SKILL.md
 │       ├── .claude-plugin/plugin.json
-│       └── references/       (onboarding, templates, lifecycle, personality, family)
+│       ├── references/       (format, templates, onboarding, code-projects, code-templates)
+│       └── scripts/          (check_memory.py, optional read-only checker)
 └── dist/
     ├── jarvis-ui-react.plugin
     ├── jarvis-ui-blazor.plugin
