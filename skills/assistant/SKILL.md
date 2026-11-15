@@ -55,3 +55,4 @@ Before finishing any turn: did the user tell me something lasting, or did projec
 - `references/onboarding.md` - first run.
 - `references/code-projects.md` - the `.claude/` flow for coding projects: when to use it, the files, the session start, what to update when.
 - `references/code-templates.md` - exact format of each `.claude/` file.
+- `scripts/check_memory.py` - OPTIONAL safety check, read only, never required. If Python is available, run `python -I scripts/check_memory.py` after saving several notes or when links look wrong. It reports orphan notes, broken links, missing `Up:` links and project files misplaced in the personal tree. If it is not available, skip it and verify by reading the indexes. Fix what it reports by hand; it changes nothing.
