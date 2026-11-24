@@ -1,0 +1,171 @@
+--- rate limiting
+PASS /fixed: first two requests 200
+PASS /fixed: third request is 429
+PASS /fixed: 429 carries numeric Retry-After >= 1 (got '3600')
+PASS /sliding: first two requests 200
+PASS /sliding: third request is 429
+PASS /sliding: 429 carries numeric Retry-After >= 1 (got '1')
+PASS /bucket: first two requests 200
+PASS /bucket: third request is 429
+PASS /bucket: 429 carries numeric Retry-After >= 1 (got '3600')
+PASS 429 body is a small JSON problem without internals
+PASS per-client: alice gets 200,200,429
+PASS per-client: bob is unaffected by alice's limit (200)
+PASS concurrency: second simultaneous request is 429
+PASS concurrency: 429 has Retry-After fallback
+PASS concurrency: first request completes 200
+PASS concurrency: slot is free again (200)
+--- audit log
+PASS audit: own logger category 'Audit'
+PASS audit: email masked (a***@example.com)
+PASS audit: raw email absent
+PASS audit: ip truncated to /24
+PASS audit: log forging attempt stays on ONE line
+  state keys: CorrelationId,Ip,Email,Outcome,Resource,Actor,Action,{OriginalFormat}
+PASS audit: structured state has Action, Actor, Outcome
+PASS audit: event id 9000, level Information
+PASS Pii.MaskKeepLast4
+PASS Pii.MaskEmail on garbage does not throw
+PASS Pii.TruncateIp ipv6
+--- safe logging
+PASS Clean replaces CR/LF with _
+PASS Clean replaces unicode line separator
+PASS Clean caps length at 256
+PASS Clean(null) is empty
+PASS Redact bearer token
+PASS Redact bare JWT
+PASS Redact key=value secrets, keep other params
+PASS Redact password: form
+PASS LoggerMessage: generated method writes event 1000 with template values
+PASS LoggerMessage: injected newline cannot add a log line
+PASS LoggerMessage: structured property {User} kept
+PASS correlation: valid incoming id is echoed
+PASS correlation: unsafe incoming id replaced by a generated 32-hex id
+PASS correlation: absent id is generated
+PASS correlation: id is in the log scope of handler log lines
+--- observability
+PASS traces: ASP.NET Core request span exported
+PASS traces: custom ActivitySource span exported
+PASS traces: custom span is a child of the request span
+PASS metrics: custom counter orders.created exported
+PASS metrics: http.server.request.duration exported
+PASS metrics: runtime metrics exported
+PASS health: liveness 200 'Healthy'
+PASS health: readiness 200 when dependency up
+PASS health: readiness 503 when dependency down
+PASS health: liveness stays 200 when dependency down (no restart loop)
+PASS health: body is only the status word, no detail leaked
+--- resilience
+PASS retry: GET succeeds after two 503 (status 200, downstream calls 3)
+PASS retry: 400 is not retried (calls 1)
+PASS retry: POST is not retried (calls 1)
+PASS retry: gives up after MaxRetries (1 + 3 = 4 calls, got 4)
+PASS breaker: opens after failures (exception BrokenCircuitException, after 3 requests)
+PASS breaker: open circuit fails fast, downstream not called again
+PASS timeout: hung downstream cut off by the attempt timeout (TimeoutRejectedException, 337 ms)
+PASS retry: Retry-After: 1 on 429 is honoured (waited 1009 ms)
+--- security headers
+PASS headers: X-Content-Type-Options nosniff
+PASS headers: CSP default-src 'none' and frame-ancestors 'none'
+PASS headers: X-Frame-Options DENY
+PASS headers: Referrer-Policy no-referrer
+PASS headers: Permissions-Policy present
+PASS headers: Cache-Control no-store
+PASS headers: no Server / X-Powered-By
+PASS headers: HSTS over https (max-age 1 year, includeSubDomains)
+PASS headers: also present on a 404
+PASS headers: unhandled exception does not leak its message into a response body
+PASS headers: no HSTS header over plain http (RFC 6797 section 7.2)
+--- input validation
+PASS valid order: 201
+PASS valid order: owner comes from the token, status and admin flag from the server
+PASS mass assignment: extra server-owned members rejected with 400
+PASS mass assignment: nothing stored
+PASS mass assignment: even with lenient JSON the DTO has no property to receive isAdminOrder
+PASS strict options reject unknown members
+PASS validation: quantity 0 -> 400 problem details naming 'quantity'
+PASS validation: quantity 1001 -> 400 problem details naming 'quantity'
+PASS validation: missing productName -> 400 problem details naming 'productName'
+PASS validation: empty productName -> 400 problem details naming 'productName'
+PASS validation: productName 81 chars -> 400 problem details naming 'productName'
+PASS validation: bad email -> 400 problem details naming 'notifyEmail'
+PASS validation: invalid requests stored nothing
+PASS BOLA: owner reads own order 200
+PASS BOLA: another user gets 404, not 403 and not the order
+PASS route constraint: non-guid id is 404 before the handler
+PASS sort allow-list: unknown field -> 400
+PASS sort allow-list: known field -> 200
+PASS paging: take=1 returns 1, take=-5 is clamped to 1, huge take is capped at 100
+PASS list: bob sees none of alice's orders
+--- webhook
+PASS secret parsing: whsec_ prefix stripped and base64 decoded
+PASS verify: valid signature -> Ok
+PASS verify: not yet processed -> a second Verify is still Ok (id recorded only by MarkProcessed)
+PASS verify: replay of same webhook-id after MarkProcessed -> Duplicate
+PASS verify: retry with a FRESH timestamp, same id -> still Duplicate (idempotency beyond the window)
+PASS verify: tampered body -> BadSignature
+PASS verify: wrong secret -> BadSignature
+PASS verify: one-hour-old timestamp -> StaleTimestamp
+PASS verify: one-hour-future timestamp -> StaleTimestamp (both directions)
+PASS verify: timestamp changed after signing -> BadSignature
+PASS verify: id with a dot -> Malformed
+PASS verify: non-numeric timestamp -> Malformed
+PASS verify: '+<ts>' and ' <ts>' timestamps -> Malformed (FIX-1)
+PASS verify: out-of-range timestamp 99999999999999 -> Malformed, no exception (FIX-2)
+PASS verify: empty id and 129-char id -> Malformed
+PASS rotation: header 'v1,AAAA <signed with previous key>' accepted
+PASS rotation: header with v2a entry first and good v1 second accepted
+PASS rotation: only a v2a entry -> BadSignature
+PASS rotation: base64 of wrong length / garbage -> BadSignature, no exception
+PASS DOC block (as written): valid delivery -> Ok
+PASS DOC block (as written): immediate replay -> Duplicate
+PASS DOC block (as written): enqueue fails, sender retries -> Duplicate = the event is LOST (this is the doc defect)
+PASS DOC block (as written): timestamp 99999999999999 throws ArgumentOutOfRangeException (= HTTP 500 on an anonymous endpoint)
+PASS endpoint: valid delivery -> 202
+PASS endpoint: queue received the exact raw body
+PASS endpoint: redelivery of the same id -> 200, not queued again
+PASS endpoint: bad signature -> 401
+PASS endpoint: stale and malformed -> same 401 for every failure
+PASS endpoint: body over 256 KiB -> 413
+PASS endpoint: request without Content-Length -> 413 (behaviour of the doc block, got 413)
+PASS endpoint: queue failure surfaces as an error (sender will retry)
+PASS endpoint: retry after the queue recovered -> 202, event NOT lost (FIX-4)
+--- mcp
+PASS mcp: tools/list works over the in-memory transport
+PASS mcp: allowed tool call returns its result
+PASS mcp: tool without the scope in the ToolPolicy table is denied (IsError, generic text)
+PASS mcp: [Authorize(Policy)] denial by the SDK surfaces as a protocol error (McpProtocolException: Request failed (remote): Access forbidden: This tool requires authorization.)
+PASS mcp: token with tools:write may call delete_invoice
+PASS mcp: scope tools:export allows export_invoices
+PASS mcp: unknown tool is not executed (IsError=True)
+  audit trail: get_invoice/alice/ok ; export_invoices/alice/denied ; delete_invoice/carol/ok ; export_invoices/carol/ok ; not_a_tool/alice/denied
+PASS mcp audit: ok for get_invoice by alice
+PASS mcp audit: denied for export_invoices by alice at Warning
+PASS mcp audit: ok for delete_invoice by carol
+PASS mcp audit: record carries a duration (Ms)
+PASS mcp audit: tool name only, never arguments or results
+  NOTE: alice's [Authorize]-denied delete_invoice call is NOT in the McpAudit filter trail
+PASS mcp auth (doc block): no token -> 401
+PASS mcp auth (doc block): WWW-Authenticate has resource_metadata and no error
+--- tls
+PASS kestrel policy: TLS 1.2 + 1.3, no client certificate
+PASS kestrel: AddServerHeader = false after UseTlsDefaults
+PASS client (doc block): handshake with the pinned self-signed certificate succeeds (Tls13)
+PASS client (doc block): a different self-signed certificate is rejected (AuthenticationException)
+PASS client (doc block): unpinned self-signed certificate is rejected by default (AuthenticationException)
+PASS protocol policy: TLS1.2-only client against TLS1.3-only server fails (AuthenticationException)
+PASS protocol policy: server limited to TLS1.2 negotiates Tls12
+PASS mTLS DOC block (as written): client certificate from a private CA is REJECTED even though the CA issued it (AuthenticationException)
+PASS mTLS (FIX-1): certificate issued by the configured CA is accepted ()
+PASS mTLS (FIX-1): same subject from a different CA is rejected (AuthenticationException)
+PASS mTLS (FIX-1): no client certificate is rejected under RequireCertificate (AuthenticationException)
+PASS mTLS (FIX-1): valid chain but not on the allow-list is rejected (AuthenticationException)
+PASS x5t#S256: equals base64url(SHA-256(DER)) computed independently, no padding
+PASS x5t#S256: 43 characters
+PASS binding: matching certificate -> true
+PASS binding: different certificate -> false
+PASS binding: token bound but no client certificate -> false
+PASS binding: token without cnf -> true (nothing to check)
+PASS binding (FIX-2): cnf with only a DPoP jkt is not a certificate binding -> true, no exception
+PASS binding DOC block (as written): GetProperty on a jkt-only cnf throws KeyNotFoundException
+ALL PASSED (157 checks)

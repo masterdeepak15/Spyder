@@ -37,6 +37,9 @@ Pick whichever skills you need:
 ```
 /plugin install assistant@spyder
 ```
+```
+/plugin install dotnet-auth-standards@spyder
+```
 
 ---
 
@@ -115,6 +118,16 @@ If you just want one skill without adding the full marketplace:
 
 ---
 
+### `dotnet-auth-standards` - v1.0.0
+> Opinionated .NET / ASP.NET Core standards for auth, APIs, webhooks, MCP and production code
+
+- **Covers:** OAuth 2.0/2.1, OpenID Connect, JWT and bearer tokens, DPoP, REST/HTTP semantics, API design, webhooks, MCP servers and clients, TLS/mTLS, API security hardening, production operations, and C# coding standards (naming, OOP, SOLID)
+- **Automatic** - loads when you write or review C# / ASP.NET Core code that touches these areas, even if you do not name an RFC
+- **Contents:** 10 reference guides in `reference/`, a review checklist in `checklists/`, and compiled, self-tested samples in `examples/`
+- **Requires:** nothing to install; the samples need the .NET SDK only if you want to build them
+
+---
+
 ## 🗂️ Repo Structure
 
 ```
@@ -138,11 +151,17 @@ Spyder/
 │   │   ├── SKILL.md
 │   │   ├── .claude-plugin/plugin.json
 │   │   └── references/       (templates, quick-reference, project-scan, lifecycle)
-│   └── assistant/
+│   ├── assistant/
+│   │   ├── SKILL.md
+│   │   ├── .claude-plugin/plugin.json
+│   │   ├── references/       (format, templates, onboarding, code-projects, code-templates)
+│   │   └── scripts/          (check_memory.py, optional read-only checker)
+│   └── dotnet-auth-standards/
 │       ├── SKILL.md
 │       ├── .claude-plugin/plugin.json
-│       ├── references/       (format, templates, onboarding, code-projects, code-templates)
-│       └── scripts/          (check_memory.py, optional read-only checker)
+│       ├── reference/      (10 guides: OAuth/OIDC, tokens, REST, API design, webhooks, MCP, TLS, security, operations, coding standards)
+│       ├── checklists/      (code-review.md)
+│       └── examples/        (compiled, self-tested C# samples)
 └── dist/
     ├── jarvis-ui-react.plugin
     ├── jarvis-ui-blazor.plugin
