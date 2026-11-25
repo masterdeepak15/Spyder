@@ -1,7 +1,7 @@
 {
   "name": "dotnet-auth-standards",
   "description": "Opinionated .NET / ASP.NET Core standards for OAuth 2.0/2.1, OpenID Connect, JWT and bearer tokens, DPoP, REST and HTTP semantics, API design, webhooks, MCP servers and clients, TLS/mTLS, API security hardening, production operations, and C# coding standards. Reference guides, review checklists and compiled, self-tested samples.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "Deepak Chougale",
     "email": "mailboxdeepak15@gmail.com"
